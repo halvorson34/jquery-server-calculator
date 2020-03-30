@@ -25,3 +25,46 @@ function calcEqual(event) {
   $(".inputA").val("");
   $(".inputB").val("");
 }
+
+function getInputs() {
+  $.ajax({
+    method: "GET",
+    url: "/inputs"
+  })
+    .then(response => {
+      render(response);
+    })
+    .catch(err => {
+      console.log("err");
+      alert("There was an error finding inputs.");
+    });
+}
+
+function saveInputs(newInputs) {
+  $.ajax({
+    method: "POST",
+    url: "/inputs",
+    data: newInputs
+  })
+    .then(response => {
+      console.log(response);
+      getInputs();
+    })
+    .catch(err => {
+      console.log("err");
+      alert("There was an error saving inputs.");
+    });
+}
+
+function render(inputList) {
+  console.log("RENDER INPUTS");
+  $(".history").empty();
+
+  for (let i = 0; i < inputList.length; i++) {
+    const inputItem = inputList[i];
+
+    $(".history").append(`
+      <p>${inputItem.valueFirst}: ${inputItem.valueSecond}</p>
+    `);
+  }
+}
